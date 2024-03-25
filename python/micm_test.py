@@ -28,6 +28,47 @@ chemistry = musica.Chemistry(["stratosphere", "troposphere"], solver=musica.MICM
 for time in range(0, 1000):
   chemistry.solve(time_step, temperature, pressure, concentrations)
 
+# Option 3 -- date time time step
+import xarray as xr
+
+conditions = xr.Dataset("chem_conditions.nc")
+# latitude = [-90, -80]
+# longtidue = [90, 80]
+# time = [12/12/2020]
+# species = ["a", "b", "c", "d", "e"]
+#    - latitude
+#    - longitude
+#    - time
+conditions["a"] = xr.array_like(conditions["temperature"], fill = np.nan)
+
+conditions["time"] = [12/13/2020, 12/14/2020, 12/15/2020, 12/16/2020, 12/17/2020]
+
+solver = musica.CreateMICM("configs/chapman")  
+photolysis = musica.TUVX("configs/tuvx")
+
+last_time = conditions.time[0]
+
+for time in conditions.time[1:]:
+  solver.set_rate(photolysis.rates(temperature, pressure, air_density))
+  temperature, pressure, air_density = conditions[time]["temperature", "pressure", "air_density"]
+  solver.solve(last_time=last_time, current_time=time, temperature, pressure, concentrations)
+  conditions.loc[time] = concentrations
+  last_time = time
+
+# Option 4 -- musica defined state
+import xarray as xr
+
+conditions = xr.Dataset("chem_conditions.nc")
+
+solver = musica.CreateMICM("configs/chapman")  
+photolysis = musica.TUVX("configs/tuvx")
+states = musica.State(conditions)
+
+for state in states:
+  solver.set_rate(photolysis.rates(temperature, pressure, air_density))
+  solver.solve(time, temperature, pressure, concentrations)
+  conditions.loc[time] = concentrations
+
 print(concentrations)
 
 assert concentrations[0] == 0.75
