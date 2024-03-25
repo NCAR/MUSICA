@@ -66,6 +66,7 @@ states = musica.State(conditions)
 
 for state in states:
   solver.set_rate(photolysis.rates(temperature, pressure, air_density))
+  time, temperature, pressure, air_density = *state
   solver.solve(time, temperature, pressure, concentrations)
   conditions.loc[time] = concentrations
 
