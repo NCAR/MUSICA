@@ -70,6 +70,11 @@ for state in states:
   solver.solve(time, temperature, pressure, concentrations)
   conditions.loc[time] = concentrations
 
+# Option 5 -- only photolysis
+  
+photolysis = musica.TUVX("configs/tuvx")
+rates = photolysis.rates(temperature, pressure, air_density)
+
 print(concentrations)
 
 assert concentrations[0] == 0.75
