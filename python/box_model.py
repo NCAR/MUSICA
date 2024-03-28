@@ -1,10 +1,13 @@
 import musica
 import datetime
+import json
 
+# Use Case 1
 # Simple MICM simulation
-flow_tube = musica.Create(chemistry = musica.MICM("flowtube.micm.json"))
+with open('flowtube.micm.json') as file:
+  flow_tube = musica.Create(chemistry = musica.MICM(json.load(file)))
 
-time_step = 200.0  # s
+time_step = datetime.timedelta(seconds=200)  # s
 conditions = {
   "temperature": 298.43,  # K
   "pressure": 101325.2,  # Pa
@@ -14,11 +17,23 @@ initial_concentrations = {"O3": 0.1, "ISOPRENE": 0.05, "SOA1": 0.0, "SOA2": 0.0}
 
 final_concentrations = flow_tube.solve(time_step, conditions, initial_concentrations)
 
+# output something like:
+# final_concentrations = {
+# "O3": 0.08,
+# "ISOPRENE": 0.03,
+# "SOA1": 0.01,
+# "SOA2": 0.0
+# }
 
-# Simple MICM and TUV-x calculation
+################################################################################
+
+# Use Case 2
+# Simple MICM and TUV-x calculation for a single grid cell over multiple time steps
 # (assumes that TUV-x and MICM are configured with matching labels for photolysis rate constants)
-outdoor_chamber = musica.Create(chemistry = musica.MICM("outdoor-chamber.micm.json"),
-                                photolysis = musica.TUV("outdoor-chamber.tuvx.json"))
+with open('outdoor-chamber.micm.json') as micm_file:
+  with open('outdoor-chamber.tuvx.json') as tuvx_file:
+    outdoor_chamber = musica.Create(chemistry=musica.MICM(json.load(micm_file)),
+                                    photolysis=musica.TUVX(json.load(tuvx_file)))
 
 times = [datetime.datetime(2022, 1, 1, 0, 0),
          datetime.datetime(2022, 1, 1, 2, 0),
@@ -36,7 +51,20 @@ conditions = {
 }
 initial_concentrations = {"O3": 0.1, "ISOPRENE": 0.05, "SOA1": 0.0, "SOA2": 0.0}
 
-# (this internally calculates TUV-x photolysis rates and passes them to MICM)
-final_concentrations = outdoor_chamber.solve(times, conditions, initial_concentrations)
+# Solves for all times and conditions starting from initial_concentrations and returns final concentrations at each time step
+# (this internally calculates TUV-x photolysis rates and passes them to MICM at each timestep)
+final_concentrations = outdoor_chamber.solve(conditions, initial_concentrations)
+
+# output something like:
+# final_concentrations = {
+# "O3": [0.1, 0.09, 0.08, 0.07, 0.06, 0.05],
+# "ISOPRENE": [0.05, 0.04, 0.03, 0.02, 0.01, 0.0],
+# "SOA1": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05],
+# "SOA2": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05]
+# }
+
+################################################################################
+
+# Use Case 3
 
 
