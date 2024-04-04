@@ -65,6 +65,25 @@ final_concentrations = outdoor_chamber.solve(conditions, initial_concentrations)
 
 ################################################################################
 
-# Use Case 3
+# A&M MusicBox example
+
+box_model = BoxModel()
+
+# configures box model
+conditions_path = "configs/test_config_1/my_config.json"
+camp_path = "configs/test_config_1/camp_data"
+
+box_model.readConditionsFromJson(conditions_path)
+box_model.create_solver(camp_path)
+
+# solves and saves output
+output = box_model.solve()
+
+conc_a_index = output[0].index('CONC.A')
+conc_b_index = output[0].index('CONC.B')
+conc_c_index = output[0].index('CONC.C')
+
+#extracts model concentrations from data output
+model_concentrations = [[row[conc_a_index], row[conc_b_index], row[conc_c_index]] for row in output[1:]]
 
 
