@@ -46,11 +46,11 @@ TEST_F(MicmCApiTest, BadConfigurationFilePath)
 TEST_F(MicmCApiTest, MissingSpeciesProperty)
 {
   Error error = NoError();
-  String string_value;
+  String* string_value;
   string_value = GetSpeciesPropertyString(micm, "O3", "bad property", &error);
   ASSERT_TRUE(IsError(error, MICM_ERROR_CATEGORY_SPECIES, MICM_SPECIES_ERROR_CODE_PROPERTY_NOT_FOUND));
-  ASSERT_STREQ(string_value.value_, nullptr);
-  DeleteString(&string_value);
+  ASSERT_STREQ(string_value->value_, nullptr);
+  DeleteString(string_value);
   DeleteError(&error);
   error = NoError();
   ASSERT_EQ(GetSpeciesPropertyDouble(micm, "O3", "bad property", &error), 0.0);
@@ -84,7 +84,7 @@ TEST_F(MicmCApiTest, GetSpeciesOrdering)
   bool found = false;
   for (size_t i = 0; i < array_size; i++)
   {
-    if (strcmp(species_ordering[i].name_.value_, "O3") == 0)
+    if (strcmp(species_ordering[i].name_->value_, "O3") == 0)
     {
       found = true;
       break;
@@ -94,7 +94,7 @@ TEST_F(MicmCApiTest, GetSpeciesOrdering)
   found = false;
   for (size_t i = 0; i < array_size; i++)
   {
-    if (strcmp(species_ordering[i].name_.value_, "O") == 0)
+    if (strcmp(species_ordering[i].name_->value_, "O") == 0)
     {
       found = true;
       break;
@@ -104,7 +104,7 @@ TEST_F(MicmCApiTest, GetSpeciesOrdering)
   found = false;
   for (size_t i = 0; i < array_size; i++)
   {
-    if (strcmp(species_ordering[i].name_.value_, "O2") == 0)
+    if (strcmp(species_ordering[i].name_->value_, "O2") == 0)
     {
       found = true;
       break;
@@ -114,7 +114,7 @@ TEST_F(MicmCApiTest, GetSpeciesOrdering)
   found = false;
   for (size_t i = 0; i < array_size; i++)
   {
-    if (strcmp(species_ordering[i].name_.value_, "M") == 0)
+    if (strcmp(species_ordering[i].name_->value_, "M") == 0)
     {
       found = true;
       break;
@@ -124,7 +124,7 @@ TEST_F(MicmCApiTest, GetSpeciesOrdering)
   found = false;
   for (size_t i = 0; i < array_size; i++)
   {
-    if (strcmp(species_ordering[i].name_.value_, "O1D") == 0)
+    if (strcmp(species_ordering[i].name_->value_, "O1D") == 0)
     {
       found = true;
       break;
@@ -146,7 +146,7 @@ TEST_F(MicmCApiTest, GetUserDefinedReactionRatesOrdering)
   bool found = false;
   for (size_t i = 0; i < array_size; i++)
   {
-    if (strcmp(reaction_rates_ordering[i].name_.value_, "PHOTO.R1") == 0)
+    if (strcmp(reaction_rates_ordering[i].name_->value_, "PHOTO.R1") == 0)
     {
       found = true;
       break;
@@ -156,7 +156,7 @@ TEST_F(MicmCApiTest, GetUserDefinedReactionRatesOrdering)
   found = false;
   for (size_t i = 0; i < array_size; i++)
   {
-    if (strcmp(reaction_rates_ordering[i].name_.value_, "PHOTO.R3") == 0)
+    if (strcmp(reaction_rates_ordering[i].name_->value_, "PHOTO.R3") == 0)
     {
       found = true;
       break;
@@ -166,7 +166,7 @@ TEST_F(MicmCApiTest, GetUserDefinedReactionRatesOrdering)
   found = false;
   for (size_t i = 0; i < array_size; i++)
   {
-    if (strcmp(reaction_rates_ordering[i].name_.value_, "PHOTO.R5") == 0)
+    if (strcmp(reaction_rates_ordering[i].name_->value_, "PHOTO.R5") == 0)
     {
       found = true;
       break;
@@ -221,11 +221,11 @@ TEST_F(MicmCApiTest, SolveMicmInstance)
 TEST_F(MicmCApiTest, GetSpeciesProperty)
 {
   Error error;
-  String string_value;
+  String* string_value;
   string_value = GetSpeciesPropertyString(micm, "O3", "__long name", &error);
   ASSERT_TRUE(IsSuccess(error));
-  ASSERT_STREQ(string_value.value_, "ozone");
-  DeleteString(&string_value);
+  ASSERT_STREQ(string_value->value_, "ozone");
+  DeleteString(string_value);
   ASSERT_EQ(GetSpeciesPropertyDouble(micm, "O3", "molecular weight [kg mol-1]", &error), 0.048);
   ASSERT_TRUE(IsSuccess(error));
   ASSERT_TRUE(GetSpeciesPropertyBool(micm, "O3", "__do advect", &error));

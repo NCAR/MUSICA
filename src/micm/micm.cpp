@@ -119,16 +119,15 @@ namespace musica
     return reactionRates;
   }
 
-  String GetSpeciesPropertyString(MICM *micm, const char *species_name, const char *property_name, Error *error)
+  String* GetSpeciesPropertyString(MICM *micm, const char *species_name, const char *property_name, Error *error)
   {
     DeleteError(error);
     std::string species_name_str(species_name);
     std::string property_name_str(property_name);
     const std::string value_str = micm->GetSpeciesProperty<std::string>(species_name_str, property_name_str, error);
-    String value;
     if (!IsSuccess(*error))
     {
-      return value;
+      return nullptr;
     }
     return CreateString(value_str.c_str());
   }

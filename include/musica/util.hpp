@@ -30,21 +30,21 @@ namespace musica
     struct Error
     {
       int code_;
-      String category_;
-      String message_;
+      String* category_;
+      String* message_;
     };
 
     /// @brief A struct to represent a mapping between a string and an index
     struct Mapping
     {
-      String name_;
+      String* name_;
       size_t index_;
     };
 
     /// @brief Casts a char* to a String
     /// @param value The char* to cast
     /// @return The casted String
-    String CreateString(const char* value);
+    String* CreateString(const char* value);
 
     /// @brief Deletes a String
     /// @param str The String to delete

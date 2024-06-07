@@ -21,7 +21,7 @@ protected:
         config_path = configPath; // Set the config path based on the parameter
         tuvx = CreateTuvx(config_path, &error);
         if (!IsSuccess(error)) {
-            std::cerr << "Error creating TUVX instance: " << error.message_.value_ << std::endl;
+            std::cerr << "Error creating TUVX instance: " << error.message_->value_ << std::endl;
         }
         ASSERT_TRUE(IsSuccess(error));
         DeleteError(&error);

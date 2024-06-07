@@ -40,7 +40,7 @@ namespace musica
         Error *error);
     Mapping *GetSpeciesOrdering(MICM *micm, size_t *array_size, Error *error);
     Mapping *GetUserDefinedReactionRatesOrdering(MICM *micm, size_t *array_size, Error *error);
-    String GetSpeciesPropertyString(MICM *micm, const char *species_name, const char *property_name, Error *error);
+    String* GetSpeciesPropertyString(MICM *micm, const char *species_name, const char *property_name, Error *error);
     double GetSpeciesPropertyDouble(MICM *micm, const char *species_name, const char *property_name, Error *error);
     int GetSpeciesPropertyInt(MICM *micm, const char *species_name, const char *property_name, Error *error);
     bool GetSpeciesPropertyBool(MICM *micm, const char *species_name, const char *property_name, Error *error);

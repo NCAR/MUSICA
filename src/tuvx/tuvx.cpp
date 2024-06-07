@@ -111,11 +111,11 @@ namespace musica
   void TUVX::Create(const std::string &config_path, Error *error)
   {
     int parsing_status = 0;  // 0 on success, 1 on failure
+    // create a smart pointer to a String with a dustom deleter
     try
     {
-      String config_path_str = CreateString(const_cast<char *>(config_path.c_str()));
-      tuvx_ = InternalCreateTuvx(config_path_str, &parsing_status);
-      DeleteString(&config_path_str);
+      std::unique_ptr<String, decltype(&DeleteString)> config_path_str(CreateString(const_cast<char *>(config_path.c_str())), &DeleteString);
+      tuvx_ = InternalCreateTuvx(*config_path_str, &parsing_status);
       if (parsing_status == 1)
       {
         *error = Error{ 1, CreateString(MUSICA_ERROR_CATEGORY), CreateString("Failed to create tuvx instance") };
@@ -162,7 +162,7 @@ namespace musica
     auto name = CreateString(grid_name);
     auto units = CreateString(grid_units);
 
-    Grid *grid = new Grid(InternalGetGrid(grid_map_, name, units, &error_code));
+    Grid *grid = new Grid(InternalGetGrid(grid_map_, *name, *units, &error_code));
     grids_.push_back(std::unique_ptr<Grid>(grid));
 
     *error = NoError();

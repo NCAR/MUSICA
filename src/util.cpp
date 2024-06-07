@@ -9,12 +9,12 @@
 namespace musica
 {
 
-  String CreateString(const char* value)
+  String* CreateString(const char* value)
   {
-    String str;
-    str.size_ = std::strlen(value);
-    str.value_ = new char[str.size_ + 1];
-    std::strcpy(str.value_, value);
+    String* str = new String();
+    str->size_ = std::strlen(value);
+    str->value_ = new char[str->size_ + 1];
+    std::strcpy(str->value_, value);
     return str;
   }
 
@@ -57,14 +57,14 @@ namespace musica
 
   bool IsError(const Error& error, const char* category, int code)
   {
-    return error.code_ == code && (error.category_.value_ == nullptr && category == nullptr) ||
-           std::strcmp(error.category_.value_, category) == 0;
+    return error.code_ == code && (error.category_->value_ == nullptr && category == nullptr) ||
+           std::strcmp(error.category_->value_, category) == 0;
   }
 
   void DeleteError(Error* error)
   {
-    DeleteString(&(error->category_));
-    DeleteString(&(error->message_));
+    DeleteString(error->category_);
+    DeleteString(error->message_);
   }
 
   bool operator==(const Error& lhs, const Error& rhs)
@@ -73,8 +73,8 @@ namespace musica
     {
       return true;
     }
-    return lhs.code_ == rhs.code_ && (lhs.category_.value_ == nullptr && rhs.category_.value_ == nullptr) ||
-           std::strcmp(lhs.category_.value_, rhs.category_.value_) == 0;
+    return lhs.code_ == rhs.code_ && (lhs.category_->value_ == nullptr && rhs.category_->value_ == nullptr) ||
+           std::strcmp(lhs.category_->value_, rhs.category_->value_) == 0;
   }
 
   bool operator!=(const Error& lhs, const Error& rhs)
@@ -92,7 +92,7 @@ namespace musica
 
   void DeleteMapping(Mapping* mapping)
   {
-    DeleteString(&(mapping->name_));
+    DeleteString(mapping->name_);
   }
 
   void DeleteMappings(Mapping* mappings, size_t size)
