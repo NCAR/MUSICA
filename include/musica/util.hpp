@@ -30,8 +30,8 @@ namespace musica
     struct Error
     {
       int code_;
-      String* category_;
-      String* message_;
+      String* category_ = nullptr;
+      String* message_ = nullptr;
     };
 
     /// @brief A struct to represent a mapping between a string and an index

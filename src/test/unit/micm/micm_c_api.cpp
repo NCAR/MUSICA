@@ -49,7 +49,7 @@ TEST_F(MicmCApiTest, MissingSpeciesProperty)
   String* string_value;
   string_value = GetSpeciesPropertyString(micm, "O3", "bad property", &error);
   ASSERT_TRUE(IsError(error, MICM_ERROR_CATEGORY_SPECIES, MICM_SPECIES_ERROR_CODE_PROPERTY_NOT_FOUND));
-  ASSERT_STREQ(string_value->value_, nullptr);
+  ASSERT_EQ(string_value, nullptr);
   DeleteString(string_value);
   DeleteError(&error);
   error = NoError();

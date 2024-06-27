@@ -20,6 +20,8 @@ namespace musica
 
   void DeleteString(String* str)
   {
+    if (!str)
+      return;
     if (str->value_ != nullptr)
       delete[] str->value_;
     str->value_ = nullptr;
