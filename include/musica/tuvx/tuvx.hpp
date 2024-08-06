@@ -38,6 +38,8 @@ namespace musica
     /// @return a profile map pointer
     ProfileMap *CreateProfileMap(Error *error);
 
+    Mapping* GetPhotolysisReactionLabels(size_t n_tuvx_reactions, Error *error);
+
     ~TUVX();
 
    private:
