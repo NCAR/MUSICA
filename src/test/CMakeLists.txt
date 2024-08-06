@@ -2,6 +2,7 @@
 # Add subdirectories containing tests
 
 add_subdirectory(unit)
+add_subdirectory(integration)
 
 ################################################################################
 # Copy test data

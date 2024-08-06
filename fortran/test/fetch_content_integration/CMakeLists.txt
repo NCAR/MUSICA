@@ -117,3 +117,24 @@ if (MUSICA_ENABLE_TUVX)
     ${CMAKE_CURRENT_SOURCE_DIR}/../../../build/_deps/tuvx-src/data ${CMAKE_BINARY_DIR}/data
   )
 endif()
+
+
+if (MUSICA_ENABLE_TUVX and MUSICA_ENABLE_MICM)
+  add_executable(test_photolysis_mapping test_photolysis_mapping.F90)
+
+  target_link_libraries(test_photolysis_mapping
+    PRIVATE
+      musica::musica-fortran
+  )
+
+  set_target_properties(test_photolysis_mapping
+    PROPERTIES
+      LINKER_LANGUAGE Fortran
+  )
+
+  add_test(
+    NAME test_photolysis_mapping
+    COMMAND $<TARGET_FILE:test_photolysis_mapping>
+    WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+  )
+endif()
